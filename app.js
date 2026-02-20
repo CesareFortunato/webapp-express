@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT;
@@ -15,7 +16,7 @@ app.use(express.static('public'));
 
 // rotta home
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send("<h1>Rotta Home della webapp dei film</h1>")
 })
 
@@ -26,5 +27,5 @@ app.use(notFound);
 
 
 app.listen(port, () => {
-    console.log(`Esempio ${port}`)
+    console.log(`Server attivo su http://localhost:${port}`)
 })
