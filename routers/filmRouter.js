@@ -15,7 +15,7 @@ const filmController = require('../controller/filmController');
 router.get('/', filmController.index)
 
 //rotta show
-router.get('/:id', filmController.index)
+router.get('/:id', filmController.show)
 
 
 module.exports = router

@@ -18,17 +18,18 @@ app.get('/api', (req, res) => {
     res.send("<h1>Rotta Home della webapp dei film</h1>")
 })
 
-//rotte del router
+//monto il router
 
-//rotta index
 app.use('/api/films', filmRouter)
 
 
 
 
 
-app.use(errorHandler);
+
 app.use(notFound);
+app.use(errorHandler);
+
 
 
 app.listen(port, () => {
