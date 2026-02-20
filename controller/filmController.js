@@ -5,7 +5,8 @@ const connection = require('../data/db');
 //funzione index
 
 function index(req, res) {
-    
+    console.log("hai richiesto index");
+
 }
 
 
@@ -13,8 +14,9 @@ function index(req, res) {
 //funzione show
 
 function show(req, res) {
+    console.log("hai richiesto un film con id specifico");
 
 }
 
 
-modeul.exports = { index, show }
+module.exports = { index, show }
