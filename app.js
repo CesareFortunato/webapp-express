@@ -2,30 +2,26 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT;
 
-//importo router
-const postsRouter = require ('./routers/posts');
-
-//importo i posts
-const posts = require('./data/postsData');
 
 //variabile middleware
 const errorHandler = require("./middlewares/errorHandler")
 const notFound = require("./middlewares/notFound")
 
+// attivo public
 app.use(express.static('public'));
 
-// body-parser
-app.use(express.json());
 
-app.use("/posts", postsRouter)
 
+
+// rotta home
 
 app.get('/', (req, res) => {
-    res.json(posts)
-    
+    res.send("<h1>Rotta Home della webapp dei film</h1>")
 })
 
-app.use("/posts", errorHandler);
+
+
+app.use(errorHandler);
 app.use(notFound);
 
 
