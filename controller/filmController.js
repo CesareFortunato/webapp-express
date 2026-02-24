@@ -23,17 +23,26 @@ function index(req, res) {
 //funzione show
 
 function show(req, res) {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const sqlFilm = 'SELECT * FROM movies WHERE id = ?';
+  const sqlFilm = 'SELECT * FROM movies WHERE id = ?';
+  const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?';
 
-    connection.query(sqlFilm, [id], (err, filmResults) => {
-        if (err) return res.status(500).json({ error: 'Database query failed' });
-        if (filmResults.length === 0) return res.status(404).json({ error: 'Film not found' });
+  connection.query(sqlFilm, [id], (err, filmResults) => {
+    if (err) return res.status(500).json({ error: 'Database query failed' });
+    if (filmResults.length === 0) return res.status(404).json({ error: 'Film not found' });
 
-        const film = filmResults[0];
-        return res.json(film);
-    })
+    const film = filmResults[0];
+
+    connection.query(sqlReviews, [id], (err, reviewResults) => {
+      if (err) return res.status(500).json({ error: 'Database query failed' });
+
+      res.json({
+        ...film,
+        reviews: reviewResults
+      });
+    });
+  });
 }
 
 
