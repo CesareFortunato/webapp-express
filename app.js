@@ -2,12 +2,20 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT;
+const cors = require ("cors");
 const filmRouter = require('./routers/filmRouter');
 
 
 //variabile middleware
 const errorHandler = require("./middlewares/errorHandler")
 const notFound = require("./middlewares/notFound")
+
+
+// attivo cors
+app.use(cors({
+    origin: 'http://localhost:5173'
+}))
+
 
 // attivo public
 app.use(express.static('public'));
