@@ -6,6 +6,10 @@ const cors = require ("cors");
 const filmRouter = require('./routers/filmRouter');
 
 
+// body-parser
+app.use(express.json());
+
+
 //variabile middleware
 const errorHandler = require("./middlewares/errorHandler")
 const notFound = require("./middlewares/notFound")
@@ -25,6 +29,8 @@ app.use(express.static('public'));
 app.get('/api', (req, res) => {
     res.send("<h1>Rotta Home della webapp dei film</h1>")
 })
+
+
 
 //monto il router
 

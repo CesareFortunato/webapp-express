@@ -17,5 +17,8 @@ router.get('/', filmController.index)
 //rotta show
 router.get('/:id', filmController.show)
 
+//rotta create
+router.post('/:id/reviews', filmController.storeReview)
+
 
 module.exports = router

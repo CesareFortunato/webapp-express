@@ -6,15 +6,15 @@ const connection = require('../data/db');
 
 function index(req, res) {
 
-    //preparo la query
-    const sql = 'SELECT * FROM movies';
+  //preparo la query
+  const sql = 'SELECT * FROM movies';
 
-    // eseguire la query
-    connection.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ error: 'Database query failed' });
+  // eseguire la query
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: 'Database query failed' });
 
-        res.json(results);
-    });
+    res.json(results);
+  });
 
 }
 
@@ -46,4 +46,25 @@ function show(req, res) {
 }
 
 
-module.exports = { index, show }
+//funzione store delle reviews
+
+function storeReview(req, res) {
+  const { id } = req.params;
+
+  //recupero info dal body
+  const { name, text, vote } = req.body;
+
+
+  //settiamo sql per DB
+  const reviewSql = 'INSERT INTO reviews (text, name, vote, movie_id) VALUES (?, ?, ?, ?)'
+  connection.query(reviewSql, [text, name, vote, id], (err, filmResults) => {
+    if (err) return res.status(500).json({ error: 'Database query failed' });
+    res.status(201);
+    res.json({message: 'Review added', id: filmResults.insertID})
+
+   
+  })
+}
+
+
+module.exports = { index, show, storeReview }
