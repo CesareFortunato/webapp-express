@@ -1,5 +1,6 @@
 // importo la connessione del DB
 const connection = require('../data/db');
+const imagePath = require('../middlewares/imagePath');
 
 
 //funzione index
@@ -13,7 +14,14 @@ function index(req, res) {
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: 'Database query failed' });
 
-    res.json(results);
+    const movies = results.map((movie => {
+      return {
+        ...movie,
+        image: req.imagePath + movie.image
+      }
+
+    }))
+    res.json(movies);
   });
 
 }
@@ -25,20 +33,22 @@ function index(req, res) {
 function show(req, res) {
   const { id } = req.params;
 
-  const sqlFilm = 'SELECT * FROM movies WHERE id = ?';
+  const sqlMovie = 'SELECT * FROM movies WHERE id = ?';
   const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?';
 
-  connection.query(sqlFilm, [id], (err, filmResults) => {
+  connection.query(sqlMovie, [id], (err, movieResults) => {
     if (err) return res.status(500).json({ error: 'Database query failed' });
-    if (filmResults.length === 0) return res.status(404).json({ error: 'Film not found' });
+    if (movieResults.length === 0) return res.status(404).json({ error: 'Movie not found' });
 
-    const film = filmResults[0];
+    const movie = movieResults[0];
+
+    movie.image = req.imagePath + movie.image
 
     connection.query(sqlReviews, [id], (err, reviewResults) => {
       if (err) return res.status(500).json({ error: 'Database query failed' });
 
       res.json({
-        ...film,
+        ...movie,
         reviews: reviewResults
       });
     });
@@ -50,20 +60,18 @@ function show(req, res) {
 
 function storeReview(req, res) {
   const { id } = req.params;
-
-  //recupero info dal body
   const { name, text, vote } = req.body;
 
+  if (!name || !text || vote == null) {
+    return res.status(400).json({ error: "Missing fields: name, text, vote" });
+  }
 
-  //settiamo sql per DB
-  const reviewSql = 'INSERT INTO reviews (text, name, vote, movie_id) VALUES (?, ?, ?, ?)'
-  connection.query(reviewSql, [text, name, vote, id], (err, filmResults) => {
+  const reviewSql = 'INSERT INTO reviews (text, name, vote, movie_id) VALUES (?, ?, ?, ?)';
+  connection.query(reviewSql, [text, name, vote, id], (err, result) => {
     if (err) return res.status(500).json({ error: 'Database query failed' });
-    res.status(201);
-    res.json({message: 'Review added', id: filmResults.insertID})
 
-   
-  })
+    return res.status(201).json({ message: 'Review added', id: result.insertId });
+  });
 }
 
 
