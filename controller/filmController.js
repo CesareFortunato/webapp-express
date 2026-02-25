@@ -1,6 +1,6 @@
 // importo la connessione del DB
 const connection = require('../data/db');
-const imagePath = require('../middlewares/imagePath');
+
 
 
 //funzione index
